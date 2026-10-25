@@ -1,0 +1,36 @@
+# Python / Environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Dataset & Artifacts
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+logs/*
+!logs/.gitkeep
+results/*
+!results/.gitkeep
+*.pth
+*.pt
+*.onnx
+
+# Environment & Keys
+.env
+.env.*
+*.key
+*.pem
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+

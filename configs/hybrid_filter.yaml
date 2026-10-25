@@ -1,0 +1,54 @@
+# Hybrid Filtering + U-Net Experiment Configuration
+
+experiment_name: "hybrid_filter_unet"
+seed: 42
+
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  splits_dir: "data/splits"
+  modalities: ["t1", "t1ce", "t2", "flair"]
+  slice_plane: "axial"
+  min_tumor_pixels: 10
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+
+preprocessing:
+  normalize: true
+  normalization_type: "zscore"
+  clip_percentiles: [0.5, 99.5]
+  target_slice_size: [128, 128]
+
+filtering:
+  enabled: true
+  bilateral:
+    d: 5
+    sigma_color: 75.0
+    sigma_space: 75.0
+  black_tophat:
+    kernel_size: 5
+    kernel_shape: "ellipse"
+  fusion_strategy: "per_channel" # Apply filtering per MRI modality
+
+model:
+  name: "UNet2D"
+  in_channels: 4
+  out_channels: 1
+  base_filters: 32
+  depth: 4
+  dropout: 0.1
+
+training:
+  batch_size: 16
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adamw"
+  loss_function: "dice_ce"
+  device: "cpu"
+
+output:
+  checkpoint_dir: "checkpoints/hybrid_filter"
+  log_dir: "logs/hybrid_filter"
+  results_dir: "results/hybrid_filter"

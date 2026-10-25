@@ -1,0 +1,46 @@
+# Baseline U-Net Experiment Configuration
+
+experiment_name: "baseline_unet"
+seed: 42
+
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  splits_dir: "data/splits"
+  modalities: ["t1", "t1ce", "t2", "flair"]
+  slice_plane: "axial" # Options: axial, sagittal, coronal
+  min_tumor_pixels: 10 # Slice filtering threshold
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+
+preprocessing:
+  normalize: true
+  normalization_type: "zscore"
+  clip_percentiles: [0.5, 99.5]
+  target_slice_size: [128, 128]
+
+filtering:
+  enabled: false
+
+model:
+  name: "UNet2D"
+  in_channels: 4
+  out_channels: 1 # Binary tumor segmentation (Whole Tumor)
+  base_filters: 32
+  depth: 4
+  dropout: 0.1
+
+training:
+  batch_size: 16
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adamw"
+  loss_function: "dice_ce" # Options: dice, ce, focal, dice_ce
+  device: "cpu"
+
+output:
+  checkpoint_dir: "checkpoints/baseline"
+  log_dir: "logs/baseline"
+  results_dir: "results/baseline"
